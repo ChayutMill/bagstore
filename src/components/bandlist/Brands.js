@@ -1,128 +1,57 @@
 import React, { Component } from "react";
-import { Row, Col } from "antd";
-import './Brands.css'
-
-import BrandLogo1 from "../../image/brand/Hermès-Logo.png";
-import BrandLogo2 from "../../image/brand/michael kors-logo.png";
-import BrandLogo3 from "../../image/brand/chanel-logo.png";
-import BrandLogo4 from "../../image/brand/burberry-logo.png";
-import BrandLogo5 from "../../image/brand/louis-vuitton-logo.png";
-import BrandLogo6 from "../../image/brand/gucci-logo.png";
+import { Row, Col, Button, Icon } from "antd";
+import Axios from "axios";
+import "./Brands.css";
 
 export class Brands extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      brand: []
+    };
+  }
+
+  componentDidMount() {
+    Axios.get("http://localhost:8080/brands").then(result => {
+      this.setState({
+        brand: result.data
+      });
+    });
+  }
+
+  handleDeleteBrand = id => {
+    Axios.delete(`http://localhost:8080/delete-brand/${id}`).then(result => {
+      console.log("success");
+    });
+  };
   render() {
     return (
-      <Row type="flex" justify="center">
-        <Col
-          span={8}
-          className="borderBrand"
-        >
-          <Row>
-            <a href="/products">
-              <img
-                className="pictureBrand"
-                src={BrandLogo1}
-                alt=""
-              />
-            </a>
-          </Row>
-        </Col>
-        {/* ---------------------------------------------- */}
-        <Col
-          span={8}
-          style={{
-            padding: "3.33333vw",
-            border: " 1px solid #EEE9E9"
-          }}
-        >
-          <Row>
-            <img
-              style={{
-                objectFit: "contain",
-                width: "100%",
-                height: "200px"
-              }}
-              src={BrandLogo2}
-              alt=""
-            />
-          </Row>
-        </Col>
-        <Col
-          span={8}
-          style={{
-            padding: "3.33333vw",
-            border: " 1px solid #EEE9E9"
-          }}
-        >
-          <Row>
-            <img
-              style={{
-                objectFit: "contain",
-                width: "100%",
-                height: "200px"
-              }}
-              src={BrandLogo3}
-              alt=""
-            />
-          </Row>
-        </Col>
-        <Col
-          span={8}
-          style={{
-            padding: "3.33333vw",
-            border: " 1px solid #EEE9E9"
-          }}
-        >
-          <Row>
-            <img
-              style={{
-                objectFit: "contain",
-                width: "100%",
-                height: "200px"
-              }}
-              src={BrandLogo4}
-              alt=""
-            />
-          </Row>
-        </Col>
-        <Col
-          span={8}
-          style={{
-            padding: "3.33333vw",
-            border: " 1px solid #EEE9E9"
-          }}
-        >
-          <Row>
-            <img
-              style={{
-                objectFit: "contain",
-                width: "100%",
-                height: "200px"
-              }}
-              src={BrandLogo5}
-              alt=""
-            />
-          </Row>
-        </Col>
-        <Col
-          span={8}
-          style={{
-            padding: "3.33333vw",
-            border: " 1px solid #EEE9E9"
-          }}
-        >
-          <Row>
-            <img
-              style={{
-                objectFit: "contain",
-                width: "100%",
-                height: "200px"
-              }}
-              src={BrandLogo6}
-              alt=""
-            />
-          </Row>
-        </Col>
+      <Row type="flex" justify="start">
+        {this.state.brand.map(brand => (
+          <Col key={brand.id} span={8} className="borderBrand">
+            <Row>
+              <a href="/products">
+                <img className="pictureBrand" src={brand.image} alt="" />
+              </a>
+            </Row>
+            <Row type="flex" justify="end" style={{ marginTop: "5px" }}>
+              <Button
+                type="default"
+                shape="circle"
+                style={{ marginRight: "5px" }}
+              >
+                <Icon type="edit" />
+              </Button>
+              <Button
+                onClick={() => this.handleDeleteBrand(brand.id)}
+                type="danger"
+                shape="circle"
+              >
+                <Icon type="delete" />
+              </Button>
+            </Row>
+          </Col>
+        ))}
       </Row>
     );
   }
