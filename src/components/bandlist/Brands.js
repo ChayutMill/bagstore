@@ -22,6 +22,7 @@ export class Brands extends Component {
   handleDeleteBrand = id => {
     Axios.delete(`http://localhost:8080/delete-brand/${id}`).then(result => {
       console.log("success");
+      this.componentDidMount() //auto f5
     });
   };
   render() {

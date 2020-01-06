@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from 'react-router-dom'
 import { Form, Row, Col, Input, Icon, Button } from "antd";
 import './SignIn.css'
 
@@ -22,7 +23,9 @@ export class SignIn extends Component {
         console.log('success')
         // successLoginNotification('success')
         localStorage.setItem("ACCESS_TOKEN", result.data.token)
+        console.log(this.props.history)
         this.props.history.push('/')
+
         window.location.reload(true);
       })
       .catch(err => {
@@ -80,4 +83,4 @@ export class SignIn extends Component {
   }
 }
 
-export default SignIn;
+export default withRouter(SignIn);

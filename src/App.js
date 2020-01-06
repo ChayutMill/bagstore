@@ -14,8 +14,6 @@ import AddProduct from "./pages/AddProduct";
 
 import "./App.css";
 
-import ChangeBG from "./pages/ChangeBG";
-
 const { Header, Content } = Layout;
 
 function App() {
@@ -35,7 +33,6 @@ function App() {
             <Route exact path="/cart" component={ShoppingCart} />
             <Route exact path="/register" component={SignInRegister} />
             <Route exact path="/addproduct" component={AddProduct} />
-            <Route exact path="/bg" component={ChangeBG} />
             <Redirect to="/" />
           </Switch>
         </BrowserRouter>

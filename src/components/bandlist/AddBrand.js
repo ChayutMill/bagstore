@@ -5,18 +5,19 @@ import Axios from "axios";
 
 const props = {
   // action: "http://localhost:8080/upload-photo",
-  listType: "picture",
+  listType: "picture"
 };
 
 export class AddBrand extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      nameValue: '',
+      nameValue: "",
       array: [{ img: "", loading: false }],
       image: "",
-    }
-    this.handdleAddBrand = this.handdleAddBrand.bind(this)
+      showOK: false
+    };
+    this.handdleAddBrand = this.handdleAddBrand.bind(this);
   }
 
   handleUploadImg = value => async info => {
@@ -53,49 +54,61 @@ export class AddBrand extends Component {
       );
     }
     console.log(this.state.array);
-    this.setState({image: this.state.array[0].img})
+    this.setState({ image: this.state.array[0].img });
   };
 
-
-  handdleAddBrand=(e)=> {
+  handdleAddBrand = e => {
     e.preventDefault();
-    
-    let image= this.state.image
-    console.log(image)
-    let name=this.state.nameValue
-    Axios.post("http://localhost:8080/add-brand",{name,image})
-    .then(result => (<Alert message="Success Text" type="success" />)
-      
-    );
-  }
+    let image = this.state.image;
+    console.log(image);
+    let name = this.state.nameValue;
+    Axios.post("http://localhost:8080/add-brand", {
+      name,
+      image
+    }).then(result => this.setState({ showOK: true }));
+  };
+
   render() {
     return (
       <Row type="flex" justify="center">
         <Col span={18}>
           <h3>ADD BRAND</h3>
-
-          <Form.Item label="NAME" className="item">
-            <Input onChange={(e)=>this.setState({nameValue: e.target.value})}/>
-          </Form.Item>
-          <Form.Item label="ADD LOGO" className="item">
-            <Upload {...props} 
-            name="photo"
-            action="http://localhost:8080/upload-photo" 
-            onChange={this.handleUploadImg(0)}>
-              <Button>
-                <Icon type="upload" /> Upload Picture
-              </Button>
-            </Upload>
-          </Form.Item>
-          <br />
-          <Form.Item>
-            <Row type="flex" justify="center">
-              <Button type="primary" htmlType="submit" className="brand-button" 
-              onClick={this.handdleAddBrand}>
-                SUBMIT
-              </Button>
-            </Row>
-          </Form.Item>
+          {this.state.showOK ? (
+            <Alert message="Success" type="success" />
+          ) : (
+            undefined
+          )}
+          <Form onSubmit={this.handdleAddBrand}>
+            <Form.Item label="NAME" className="item">
+              <Input
+                onChange={e => this.setState({ nameValue: e.target.value })}
+              />
+            </Form.Item>
+            <Form.Item label="ADD LOGO" className="item">
+              <Upload
+                {...props}
+                name="photo"
+                action="http://localhost:8080/upload-photo"
+                onChange={this.handleUploadImg(0)}
+              >
+                <Button>
+                  <Icon type="upload" /> Upload Picture
+                </Button>
+              </Upload>
+            </Form.Item>
+            <br />
+            <Form.Item>
+              <Row type="flex" justify="center">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="brand-button"
+                >
+                  SUBMIT
+                </Button>
+              </Row>
+            </Form.Item>
+          </Form>
         </Col>
       </Row>
     );
