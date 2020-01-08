@@ -11,6 +11,7 @@ import ProductList from "./pages/ProductList";
 import Product from "./pages/Product";
 import ShoppingCart from "./pages/ShoppingCart";
 import AddProduct from "./pages/AddProduct";
+import EditProduct from "./pages/EditProduct";
 
 import "./App.css";
 
@@ -33,6 +34,7 @@ function App() {
             <Route exact path="/cart" component={ShoppingCart} />
             <Route exact path="/register" component={SignInRegister} />
             <Route exact path="/addproduct" component={AddProduct} />
+            <Route exact path="/editproduct" component={EditProduct} />
             <Redirect to="/" />
           </Switch>
         </BrowserRouter>

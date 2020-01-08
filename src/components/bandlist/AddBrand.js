@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Form, Input, Button, Upload, Icon, Alert } from "antd";
+import { Row, Col, Form, Input, Button, Upload, Icon, message } from "antd";
 import "./Brands.css";
 import Axios from "axios";
 
@@ -15,7 +15,6 @@ export class AddBrand extends Component {
       nameValue: "",
       array: [{ img: "", loading: false }],
       image: "",
-      showOK: false
     };
     this.handdleAddBrand = this.handdleAddBrand.bind(this);
   }
@@ -65,23 +64,19 @@ export class AddBrand extends Component {
     Axios.post("http://localhost:8080/add-brand", {
       name,
       image
-    }).then(result => this.setState({ showOK: true }));
+    }).then(result => message.success('Success'));
   };
 
   render() {
     return (
       <Row type="flex" justify="center">
-        <Col span={18}>
-          <h3>ADD BRAND</h3>
-          {this.state.showOK ? (
-            <Alert message="Success" type="success" />
-          ) : (
-            undefined
-          )}
+        <Col span={24}>
           <Form onSubmit={this.handdleAddBrand}>
             <Form.Item label="NAME" className="item">
               <Input
-                onChange={e => this.setState({ nameValue: e.target.value })}
+                onChange={e =>
+                  this.setState({ nameValue: e.target.value.toUpperCase() })
+                }
               />
             </Form.Item>
             <Form.Item label="ADD LOGO" className="item">

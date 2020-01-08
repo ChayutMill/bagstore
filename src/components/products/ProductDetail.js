@@ -1,23 +1,48 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Col, Row, Button } from "antd";
-import './Products.css'
-import Review1 from "../../image/products/product/hermes-product1.png";
-import Review2 from "../../image/products/product/hermes-product2.png";
-import Review3 from "../../image/products/product/hermes-product3.png";
+import "./Products.css";
+import Axios from "../../config/axios.setup";
+import { connect } from "react-redux";
+import { addCart } from "../../redux/actions/actions";
+import { addTotal } from "../../redux/actions/actions";
 
 export class ProductDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pictureList: [Review1, Review2, Review3],
-      picture: Review1
+      product: [],
+      pictureList: [],
+      picture: ""
     };
   }
 
-  handleChangePic = x => {
+  componentWillMount() {
+    let targetProductID = this.props.history.location.search.slice(4);
+    Axios.get(`/get-product-detail?productId=${targetProductID}`).then(
+      result => {
+        this.setState({
+          product: result.data,
+          pictureList: [
+            result.data.image1,
+            result.data.image2,
+            result.data.image3
+          ],
+          picture: [result.data.image1]
+        });
+      }
+    );
+  }
+
+  handleChangePic = picView => {
     this.setState({
-      picture: x
+      picture: picView
     });
+  };
+
+  handleAddToCart = product => {
+    this.props.addCart(product, 1);
+    this.props.addTotal(1);
   };
 
   render() {
@@ -26,9 +51,9 @@ export class ProductDetail extends Component {
         <Col span={2} className="productDetailBox">
           <Row type="flex" justify="center">
             {this.state.pictureList.map(picbox => (
-              <Col span={24}>
+              <Col key={picbox} span={24}>
                 <img
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", cursor: "pointer" }}
                   alt=""
                   src={picbox}
                   onClick={() => this.handleChangePic(picbox)}
@@ -49,11 +74,15 @@ export class ProductDetail extends Component {
         </Col>
         <Col span={10} className="box-detail">
           <Row>
-            <h3>Kelly Classic wallet</h3>
-            <p>$14,900</p>
+            <h3>{this.state.product.name}</h3>
+            <p>฿{this.state.product.price}</p>
           </Row>
           <Row type="flex" justify="center">
-            <Button className="product-button" type="primary">
+            <Button
+              onClick={() => this.handleAddToCart(this.state.product)}
+              className="product-button"
+              type="primary"
+            >
               Add to Cart
             </Button>
           </Row>
@@ -63,11 +92,7 @@ export class ProductDetail extends Component {
                 marginTop: 16
               }}
             >
-              &nbsp; &nbsp; &nbsp; &nbsp; Hermes wallet in polished
-              Mississippiensis alligator, gold plated Kelly closure 12 credit
-              card slots, 2 pockets for bills, central zip purse for change with
-              Kelly lock pull-tab Can also be worn as an evening clutch!
-              Measures 7.8" long x 4.5" high
+              &nbsp; &nbsp; &nbsp; &nbsp; {this.state.product.description}
             </p>
           </Row>
         </Col>
@@ -75,4 +100,10 @@ export class ProductDetail extends Component {
     );
   }
 }
-export default ProductDetail;
+
+const mapDispatchToProps = {
+  addCart: addCart,
+  addTotal: addTotal
+};
+
+export default connect(null, mapDispatchToProps)(withRouter(ProductDetail));

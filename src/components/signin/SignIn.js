@@ -37,7 +37,7 @@ export class SignIn extends Component {
   render() {
     return (
       <Row type="flex" justify="center">
-        <Col span={12}>
+        <Col span={24}>
           <h3>SIGN IN</h3>
           <p>
             Sign in with your email and password.
@@ -67,7 +67,7 @@ export class SignIn extends Component {
               </Form.Item>
             </Row>
 
-            <Form.Item>
+            <Form.Item style={{marginBottom:"0"}}>
               <Button
                 type="primary"
                 htmlType="submit"

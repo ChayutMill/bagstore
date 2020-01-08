@@ -6,11 +6,11 @@ import Register from "../components/register/Register";
 export class SignInRegister extends Component {
   render() {
     return (
-      <Row>
-        <Col span={12}>
+      <Row type="flex" justify="space-around">
+        <Col span={6}>
           <SignIn />
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Register />
         </Col>
       </Row>

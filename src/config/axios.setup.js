@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-// Axios.defaults.baseURL = "http://localhost:8080"
+Axios.defaults.baseURL = "http://localhost:8080"
 
 const UNPROTECTED_PATHS = [
   "loginUser",

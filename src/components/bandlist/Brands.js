@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Icon } from "antd";
+import { Row, Col, Button, Icon, Popconfirm, message } from "antd";
 import Axios from "axios";
 import "./Brands.css";
 
@@ -16,40 +16,53 @@ export class Brands extends Component {
       this.setState({
         brand: result.data
       });
+      localStorage.setItem("brands", JSON.stringify(result.data));
     });
   }
 
-  handleDeleteBrand = id => {
-    Axios.delete(`http://localhost:8080/delete-brand/${id}`).then(result => {
+  handleUpdateBrand = id => {
+    Axios.put(`http://localhost:8080/update-brand/${id}`).then(result => {
       console.log("success");
-      this.componentDidMount() //auto f5
     });
   };
+
+  handleDeleteBrand = id => {
+    Axios.delete(`http://localhost:8080/delete-brand/${id}`).then(result => {
+      message.success("Delete Success");
+      this.componentDidMount(); //auto f5
+    });
+  };
+
   render() {
     return (
       <Row type="flex" justify="start">
         {this.state.brand.map(brand => (
           <Col key={brand.id} span={8} className="borderBrand">
             <Row>
-              <a href="/products">
+              <a href={`/products?id=${brand.id}`}>
                 <img className="pictureBrand" src={brand.image} alt="" />
               </a>
             </Row>
             <Row type="flex" justify="end" style={{ marginTop: "5px" }}>
               <Button
+                // onClick={()=> this.handleUpdateBrand(brand_id)}
+                href="/editproduct"
                 type="default"
                 shape="circle"
                 style={{ marginRight: "5px" }}
               >
                 <Icon type="edit" />
               </Button>
-              <Button
-                onClick={() => this.handleDeleteBrand(brand.id)}
-                type="danger"
-                shape="circle"
+              <Popconfirm
+                title="Are you sure delete this brand?"
+                onConfirm={() => this.handleDeleteBrand(brand.id)}
+                okText="Yes"
+                cancelText="No"
               >
-                <Icon type="delete" />
-              </Button>
+                <Button type="danger" shape="circle">
+                  <Icon type="delete" />
+                </Button>
+              </Popconfirm>
             </Row>
           </Col>
         ))}

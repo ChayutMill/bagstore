@@ -84,7 +84,7 @@ export class Register extends Component {
 
     return (
       <Row type="flex" justify="start">
-        <Col span={16}>
+        <Col span={24}>
           <h3>REGISTER</h3>
           <p>Required</p>
           <Form onSubmit={this.submitForm}>
