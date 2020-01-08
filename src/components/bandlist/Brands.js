@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Icon, Popconfirm, message } from "antd";
 import Axios from "axios";
+import { connect } from "react-redux";
 import "./Brands.css";
 
 export class Brands extends Component {
@@ -43,27 +44,29 @@ export class Brands extends Component {
                 <img className="pictureBrand" src={brand.image} alt="" />
               </a>
             </Row>
-            <Row type="flex" justify="end" style={{ marginTop: "5px" }}>
-              <Button
-                // onClick={()=> this.handleUpdateBrand(brand_id)}
-                href="/editproduct"
-                type="default"
-                shape="circle"
-                style={{ marginRight: "5px" }}
-              >
-                <Icon type="edit" />
-              </Button>
-              <Popconfirm
-                title="Are you sure delete this brand?"
-                onConfirm={() => this.handleDeleteBrand(brand.id)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button type="danger" shape="circle">
-                  <Icon type="delete" />
+            {this.props.user.role == "admin" && (
+              <Row type="flex" justify="end" style={{ marginTop: "5px" }}>
+                <Button
+                  // onClick={()=> this.handleUpdateBrand(brand_id)}
+                  href="/editproduct"
+                  type="default"
+                  shape="circle"
+                  style={{ marginRight: "5px" }}
+                >
+                  <Icon type="edit" />
                 </Button>
-              </Popconfirm>
-            </Row>
+                <Popconfirm
+                  title="Are you sure delete this brand?"
+                  onConfirm={() => this.handleDeleteBrand(brand.id)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="danger" shape="circle">
+                    <Icon type="delete" />
+                  </Button>
+                </Popconfirm>
+              </Row>
+            )}
           </Col>
         ))}
       </Row>
@@ -71,4 +74,8 @@ export class Brands extends Component {
   }
 }
 
-export default Brands;
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, null)(Brands);

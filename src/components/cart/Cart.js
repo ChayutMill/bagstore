@@ -1,10 +1,23 @@
 import React, { Component } from "react";
 import { Row, Col, Table, Statistic, Button } from "antd";
 import "./Cart.css";
-import Axios from "../../config/axios.setup";
 import { connect } from "react-redux";
+import { deleteCart, decreaseTotal } from "../../redux/actions/actions";
+import Axios from '../../config/axios.setup'
 
 export class Cart extends Component {
+  calculateTotalPrice = () => {
+    let total = 0;
+    this.props.cartList.map(product => {
+      total += product.quantity * product.price;
+    });
+    return total;
+  };
+
+  // handleCheckout = () => {
+  //   Axios.post()
+  // };
+
   render() {
     const columns = [
       {
@@ -22,11 +35,12 @@ export class Cart extends Component {
       {
         title: "Action",
         dataIndex: "",
-        render: (text, cartItem) => (
+        render: (text, cartList) => (
           <Button
-            onClick={() =>
-              this.props.handleClickDeleteProductInCart(cartItem.uid)
-            }
+            onClick={() => {
+              this.props.decreaseTotal(cartList.quantity);
+              this.props.deleteCart(cartList.id);
+            }}
           >
             Delete
           </Button>
@@ -53,12 +67,19 @@ export class Cart extends Component {
                 marginTop: 16
               }}
             >
-              <Statistic title="Total price" value="$35,000.00" />
+              <Statistic
+                title="Total price"
+                value={this.calculateTotalPrice()}
+              />
             </Col>
           </Row>
           <Row type="flex" justify="end">
             <Col span={3}>
-              <Button className="cart-form-button" type="primary">
+              <Button
+                // onClick={() => this.handleCheckout()}
+                className="cart-form-button"
+                type="primary"
+              >
                 Check out
               </Button>
             </Col>
@@ -76,4 +97,9 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Cart);
+const mapDispatchtoProps = {
+  deleteCart: deleteCart,
+  decreaseTotal: decreaseTotal
+};
+
+export default connect(mapStateToProps, mapDispatchtoProps)(Cart);

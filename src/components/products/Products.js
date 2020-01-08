@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { Row, Col, Badge, Icon } from "antd";
+import { Row, Col} from "antd";
 import Axios from "axios";
 import "./Products.css";
 
@@ -64,11 +64,6 @@ export class Products extends Component {
               </Row>
               <Row>
                 <Col span={16}>{product.name}</Col>
-                <Badge count={25}>
-                    <a href="/cart" className="fontNavbar">
-                      <Icon type="shopping-cart" />
-                    </a>
-                </Badge>
                 <Col span={8}>฿{product.price}</Col>
               </Row>
             </Col>
